@@ -317,7 +317,9 @@ func NewResolver(repoDir, customRulePath string, opts ResolverOptions) (Resolver
 	}
 
 	var projectRule *ProjectRule
-	if repoDir != "" {
+	if repoDir != "" && !repoRulesTrusted() {
+		warnIgnoredProjectRule(repoDir)
+	} else if repoDir != "" {
 		pr, err := loadProjectRule(repoDir)
 		if err != nil {
 			return nil, nil, err
